@@ -3,6 +3,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
 
+import time
 
 def update_google_sheet(name):
     scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
@@ -14,7 +15,11 @@ def update_google_sheet(name):
     cellc = sheet.find(school_day)
     R = cellr.row
     C = cellc.col
-    sheet.update_cell(R,C,'Có mặt')
 
-student = input()
-update_google_sheet(student)
+    if sheet.cell(R,C).value == '':
+        # print("***")
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        sheet.update_cell(R,C,current_time)
+    else:
+        print("Đã điểm danh rồi")
